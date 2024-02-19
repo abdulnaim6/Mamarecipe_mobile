@@ -1,9 +1,11 @@
 <h1>Mobile-Mama Recipe</h1>
 
 ## Mama Recipe
+
 <p>Mama Recipe Mobile App was created for food lovers or people who are just learning to cook and are also looking for new recipes, where on Mama Recipe's website there are various kinds of food recipes as well as videos from that food. Features provided: Users can share their own cooking recipes, users can search for recipes made by other users, and users can view cooking tutorial videos.</p>
 
 ## Table Of Content
+
 - [About The Project](#About-The-project)
 - [Built With](#Built-With)
 - [Installation](#Installation)
@@ -11,6 +13,7 @@
 - [Contributing](#Contributing)
 
 ## Built With
+
 <p>These are the libraries and services used to build this Front End Mama Recipe</p>
 <ul>
   <li>
@@ -50,29 +53,42 @@ And Other
 <pre>npm run dev</pre>
 
 ##Screenshot
+
 <details>
   <summary>
     Login
   </summary>
-
+<img src="/screenshot/login.jpg">
 </details>
 <details>
   <summary>
     Register
   </summary>
-
+<img src="/screenshot/register.jpg">
 </details>
 <details>
   <summary>
     Home
   </summary>
-
+<img src="/screenshot/home.jpg">
 </details>
 <details>
   <summary>
     Post Recipe
   </summary>
-
+<img src="/screenshot/postrecipe.jpg">
+</details>
+<details>
+  <summary>
+    Search
+  </summary>
+<img src="/screenshot/search.jpg">
+</details>
+<details>
+  <summary>
+    My recipe
+  </summary>
+<img src="/screenshot/myrecipe.jpg">
 </details>
 <details>
   <summary>
@@ -81,8 +97,8 @@ And Other
 
 </details>
 
-
 ## Contributing
+
 <p>These contributions are what make the open source community such a great place to learn, and create. Any contribution you make is greatly appreciated.</p>
 <ol>
   <li>Fork the Project</li>
@@ -93,6 +109,7 @@ And Other
 </ol>
 
 ## Related Project
+
 <ol>
   <li>
      <a href="https://github.com/abdulnaim6/Be_recipe">Backend Mama Recipe</a>
