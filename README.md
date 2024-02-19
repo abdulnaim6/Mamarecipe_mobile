@@ -38,7 +38,7 @@ And Other
 <p>1. Clone this repository</p>
 <pre>git clone https://github.com/abdulnaim/ReactNative</pre>
 <p>2. Change directory to ReactNative</p>
-<pre>cd ReactNative</pre>
+<pre>cd Mamarecipe_mobile</pre>
 <p>3. Install all of the required modules</p>
 <pre>npm install / npm i</pre>
 <p>4. Create and configure .env file in the root directory, example credentials are provided in .env</p>
