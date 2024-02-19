@@ -1,4 +1,4 @@
-<h1>FE-Mama Recipe</h1>
+<h1>Mobile-Mama Recipe</h1>
 
 ## Mama Recipe
 <p>Mama Recipe Mobile App was created for food lovers or people who are just learning to cook and are also looking for new recipes, where on Mama Recipe's website there are various kinds of food recipes as well as videos from that food. Features provided: Users can share their own cooking recipes, users can search for recipes made by other users, and users can view cooking tutorial videos.</p>
