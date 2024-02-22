@@ -75,6 +75,12 @@ function Updaterecipe({route}) {
       const result = await axios.put(
         `${process.env.API_URL}/updaterecipe/${recipeId}`,
         recipeUpdate,
+        {
+          headers: {
+            // Authorization: token,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
       );
       console.log(result.data);
       Toast.show({
@@ -84,8 +90,8 @@ function Updaterecipe({route}) {
       });
       console.log('Recipe Update Data:', recipeUpdate);
     } catch (err) {
-      console.log(err.message);
-      console.log(err.response);
+      console.log('axios error', err.message);
+      console.log('axios response', err.response);
       setIsError(true);
       setErrorMessage('Failed to update recipe!');
       Toast.show({

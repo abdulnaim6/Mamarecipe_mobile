@@ -78,7 +78,12 @@ function DetailVideo({navigation}) {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <FontAwesome name="play" size={20} color="#fff" />
+            <FontAwesome
+              name="play"
+              size={20}
+              color="#fff"
+              onPress={() => navigation.navigate('Video')}
+            />
           </View>
           <View style={{marginLeft: 20}}>
             <Text style={{color: '#18172B', fontSize: 18}}>Pizza Mini</Text>

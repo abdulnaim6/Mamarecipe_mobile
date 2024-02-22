@@ -17,6 +17,7 @@ import Search from '../screen/Search';
 import Profile from '../screen/Profile';
 import Myrecipe from '../screen/Myrecipe';
 import Updaterecipe from '../screen/Updaterecipe';
+import Video from '../screen/Video';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -125,6 +126,11 @@ function MainRoute() {
         <Stack.Screen
           name="Updaterecipe"
           component={Updaterecipe}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Video"
+          component={Video}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

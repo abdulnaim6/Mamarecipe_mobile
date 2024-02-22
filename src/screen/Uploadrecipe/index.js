@@ -13,53 +13,55 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
 import {InputRecipe} from '../../config/redux/action/recipeAction';
 import {useDispatch} from 'react-redux';
+import axios from 'axios';
 
 function Uploadrecipe({navigation}) {
-  const dispatch = useDispatch();
   const [data, setData] = useState({
     name_food: '',
     picture: '',
-    ingrediens: '',
+    ingredients: '',
     video: '',
   });
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleChange = e => {
-    const value = e.target.value;
+  const handleChange = (value, field) => {
     setData({
       ...data,
-      [e.target.name]: value,
+      [field]: value,
     });
   };
 
-  const handleUpload = e => {
-    const uploader = e.target.files[0];
-    setData({
-      ...data,
-      picture: uploader,
+  const handleUpload = () => {
+    launchImageLibrary({mediaType: 'photo'}, response => {
+      if (!response.didCancel) {
+        setData({
+          ...data,
+          picture: response.uri,
+        });
+      }
     });
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const productData = new FormData();
-    productData.append('name_food', data.name_food);
-    productData.append('picture', data.picture);
-    productData.append('ingrediens', data.ingrediens);
-    productData.append('video', data.video);
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('name_food', data.name_food);
+    formData.append('picture', {
+      uri: data.picture,
+      type: 'image/jpeg',
+      name: 'recipe_image.jpg',
+    });
+    formData.append('ingredients', data.ingredients);
+    formData.append('video', data.video);
 
     try {
-      await dispatch(InputRecipe(productData));
+      await axios.post(`${process.env.API_URL}/addrecipe`, formData);
       Toast.show({
         type: 'success',
         position: 'top',
-        text1: 'Recipe has been upload successfully!',
+        text1: 'Recipe has been uploaded successfully!',
       });
+      navigation.navigate('Homepage');
     } catch (error) {
       console.log(error);
-      setIsError(true);
-      setErrorMessage('Data Error');
       Toast.show({
         type: 'error',
         position: 'top',
@@ -99,6 +101,7 @@ function Uploadrecipe({navigation}) {
             }}
             placeholder="Title"
             placeholderTextColor={'#C4C4C4'}
+            onChangeText={value => handleChange(value, 'name_food')}
           />
         </View>
         <View
@@ -120,6 +123,7 @@ function Uploadrecipe({navigation}) {
             }}
             placeholder="Description"
             placeholderTextColor={'#C4C4C4'}
+            onChangeText={value => handleChange(value, 'ingredients')}
           />
         </View>
 
@@ -132,7 +136,8 @@ function Uploadrecipe({navigation}) {
             paddingVertical: 20,
             paddingHorizontal: 40,
             margin: 12,
-          }}>
+          }}
+          onPress={handleUpload}>
           <Text style={{color: '#ababab'}}>Add Image</Text>
         </TouchableOpacity>
         {/* <View style={{marginTop: 10}}>
@@ -167,6 +172,7 @@ function Uploadrecipe({navigation}) {
             }}
             placeholder="Video"
             placeholderTextColor={'#C4C4C4'}
+            onChangeText={value => handleChange(value, 'video')}
           />
         </View>
         <TouchableOpacity
@@ -178,7 +184,8 @@ function Uploadrecipe({navigation}) {
             borderRadius: 15,
             marginTop: 20,
             marginBottom: 30,
-          }}>
+          }}
+          onPress={handleSubmit}>
           <Text style={{textAlign: 'center'}}>POST</Text>
         </TouchableOpacity>
       </ScrollView>
