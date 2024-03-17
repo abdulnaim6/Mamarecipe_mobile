@@ -1,10 +1,45 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 
 function Profile({navigation}) {
+  const [user, setUser] = useState('');
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        setUserId(id);
+      } catch (error) {
+        console.error('Failed to fetch user ID:', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `https://be-recipe-two.vercel.app/redis/${userId}`,
+        );
+        console.log(response.data.data[0]);
+        setUser(response.data.data[0]);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    if (userId) {
+      fetchUser();
+    }
+  }, [userId]);
   return (
     <View>
       <View style={{backgroundColor: '#EEC302', width: 375, height: 250}}>
@@ -15,10 +50,10 @@ function Profile({navigation}) {
             marginTop: 60,
           }}>
           <Image
-            source={require('../../image/pizzamini.jpeg')}
+            source={{uri: user.picture}}
             style={{width: 84, height: 84, borderRadius: 60}}
           />
-          <Text style={{fontSize: 16}}>Abdul Naim</Text>
+          <Text style={{fontSize: 16}}>{user.name}</Text>
         </View>
       </View>
       <View

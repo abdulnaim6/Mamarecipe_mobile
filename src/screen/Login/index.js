@@ -118,7 +118,9 @@ function Login({navigation}) {
           onChangeText={text => handleChange('verify_password', text)}
         />
       </View>
-      <Text style={{color: '#999', marginBottom: 30, marginLeft: 190}}>
+      <Text
+        style={{color: '#999', marginBottom: 30, marginLeft: 190}}
+        onPress={() => navigation.navigate('Splash')}>
         Forgot Password ?
       </Text>
       <TouchableOpacity

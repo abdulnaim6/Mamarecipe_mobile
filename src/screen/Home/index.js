@@ -47,7 +47,7 @@ const star = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" vie
 <path d="M10.9735 4.58951C10.9421 4.49694 10.8842 4.4156 10.8071 4.35554C10.73 4.29547 10.637 4.25931 10.5395 4.25151L7.68901 4.02501L6.45551 1.29451C6.41623 1.20656 6.35233 1.13187 6.27154 1.07944C6.19074 1.027 6.09649 0.999076 6.00018 0.999024C5.90386 0.998971 5.80958 1.02679 5.72873 1.07914C5.64787 1.13148 5.58389 1.20611 5.54451 1.29401L4.31101 4.02501L1.46051 4.25151C1.36474 4.25909 1.27318 4.29411 1.19679 4.35237C1.1204 4.41063 1.06241 4.48967 1.02976 4.58002C0.99711 4.67038 0.991182 4.76822 1.01269 4.86186C1.03419 4.95549 1.08221 5.04095 1.15101 5.10801L3.25751 7.16151L2.51251 10.3875C2.48989 10.4852 2.49714 10.5874 2.53332 10.6808C2.5695 10.7743 2.63295 10.8548 2.71541 10.9117C2.79788 10.9687 2.89557 10.9996 2.99581 11.0003C3.09604 11.0011 3.19419 10.9717 3.27751 10.916L6.00001 9.10101L8.72251 10.916C8.80768 10.9726 8.90812 11.0017 9.01033 10.9994C9.11254 10.9972 9.2116 10.9637 9.29421 10.9035C9.37682 10.8432 9.439 10.7592 9.4724 10.6625C9.50579 10.5659 9.5088 10.4614 9.48101 10.363L8.56651 7.16301L10.8345 5.12201C10.983 4.98801 11.0375 4.77901 10.9735 4.58951Z" fill="#FFB200"/>
 </svg>`;
 
-function HomeScreen() {
+function HomeScreen({route}) {
   const {loading, recipe} = useSelector(state => state.recipe);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,9 +66,9 @@ function HomeScreen() {
   }, [dispatch, sort, searchQuery]);
 
   const navigation = useNavigation();
-  const handleImagePress = () => {
-    navigation.navigate('Detailmenu');
-  };
+  // const handleImagePress = recipeId => {
+  //   navigation.navigate('Detailinggrediens', recipeId);
+  // };
   return (
     <View>
       <View
@@ -105,7 +105,12 @@ function HomeScreen() {
       <ScrollView horizontal={true}>
         {recipe?.rows?.map(recipeItem => (
           <View style={{flexDirection: 'row'}} key={recipeItem.recipe_id}>
-            <TouchableOpacity onPress={handleImagePress}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Detailinggrediens', {
+                  recipeId: recipeItem.recipe_id,
+                })
+              }>
               <View>
                 <Image
                   source={{uri: recipeItem.picture}}
@@ -175,7 +180,8 @@ function HomeScreen() {
             <SvgXml xml={star} width={20} height={20} />
             <Text style={{color: '#18172B'}}>
               <Text style={{marginRight: 20}}>
-                4.3<Text style={{color: '#6E80B0'}}>Korean</Text>
+                4.3
+                <Text style={{color: '#6E80B0', marginRight: 10}}>Korean</Text>
               </Text>
             </Text>
           </View>

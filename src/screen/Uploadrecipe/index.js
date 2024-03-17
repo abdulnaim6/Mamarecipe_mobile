@@ -31,15 +31,32 @@ function Uploadrecipe({navigation}) {
   };
 
   const handleUpload = () => {
-    launchImageLibrary({mediaType: 'photo'}, response => {
+    launchCamera({mediaType: 'photo'}, response => {
       if (!response.didCancel) {
+        console.log(response.assets[0]);
         setData({
           ...data,
-          picture: response.uri,
+          picture: response.assets[0].uri,
         });
       }
     });
   };
+
+  // const handleUpload = () => {
+  //   launchImageLibrary({}, response => {
+  //     console.log(response.uri);
+  //     if (response.uri) {
+  //       const newUri = response.uri.replace(
+  //         'file://data/user/0/com.rn.mamarecipe/cache/',
+  //         '',
+  //       );
+  //       setData({
+  //         ...data,
+  //         picture: newUri,
+  //       });
+  //     }
+  //   });
+  // };
 
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -49,11 +66,16 @@ function Uploadrecipe({navigation}) {
       type: 'image/jpeg',
       name: 'recipe_image.jpg',
     });
-    formData.append('ingredients', data.ingredients);
+    formData.append('ingrediens', data.ingrediens);
     formData.append('video', data.video);
-
+    console.log(formData);
     try {
-      await axios.post(`${process.env.API_URL}/addrecipe`, formData);
+      await axios.post(`${process.env.API_URL}/addrecipe`, formData, {
+        headers: {
+          // Authorization: token,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       Toast.show({
         type: 'success',
         position: 'top',
@@ -65,7 +87,7 @@ function Uploadrecipe({navigation}) {
       Toast.show({
         type: 'error',
         position: 'top',
-        text1: 'Failed to update recipe!',
+        text1: 'Failed to upload recipe!',
       });
     }
   };
@@ -123,7 +145,7 @@ function Uploadrecipe({navigation}) {
             }}
             placeholder="Description"
             placeholderTextColor={'#C4C4C4'}
-            onChangeText={value => handleChange(value, 'ingredients')}
+            onChangeText={value => handleChange(value, 'ingrediens')}
           />
         </View>
 

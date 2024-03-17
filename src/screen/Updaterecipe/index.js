@@ -12,7 +12,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
-function Updaterecipe({route}) {
+function Updaterecipe({route, navigation}) {
   const {recipeId} = route.params;
   // console.log('Recipe ID:', recipeId);
   const [recipe, setRecipe] = useState({
@@ -20,6 +20,7 @@ function Updaterecipe({route}) {
     ingrediens: '',
     picture: '',
     video: '',
+    users_id: '',
   });
 
   const [isError, setIsError] = useState(false);
@@ -50,31 +51,32 @@ function Updaterecipe({route}) {
   };
 
   const handleUpload = () => {
-    launchImageLibrary({}, response => {
-      console.log(response);
-      if (response.uri) {
+    launchImageLibrary({mediaType: 'photo'}, response => {
+      if (!response.didCancel) {
+        console.log(response.assets[0]);
         setRecipe({
           ...recipe,
-          picture: response.uri,
+          picture: response.assets[0].uri,
         });
       }
     });
   };
 
   const handleSubmit = async () => {
-    const recipeUpdate = new FormData();
-    recipeUpdate.append('name_food', recipe.name_food);
-    recipeUpdate.append('picture', {
+    const formData = new FormData();
+    formData.append('name_food', recipe.name_food);
+    formData.append('picture', {
       uri: recipe.picture,
+      type: 'image/jpeg',
+      name: 'recipe_image.jpg',
     });
-    recipeUpdate.append('ingrediens', recipe.ingrediens);
-    recipeUpdate.append('video', recipe.video);
-
+    formData.append('ingrediens', recipe.ingrediens);
+    formData.append('video', recipe.video);
+    console.log(formData);
     try {
-      console.log(recipeUpdate);
-      const result = await axios.put(
+      await axios.put(
         `${process.env.API_URL}/updaterecipe/${recipeId}`,
-        recipeUpdate,
+        formData,
         {
           headers: {
             // Authorization: token,
@@ -82,23 +84,18 @@ function Updaterecipe({route}) {
           },
         },
       );
-      console.log(result.data);
       Toast.show({
         type: 'success',
         position: 'top',
-        text1: 'Recipe has been updated successfully!',
+        text1: 'Recipe has been uploaded successfully!',
       });
-      console.log('Recipe Update Data:', recipeUpdate);
-    } catch (err) {
-      console.log('axios error', err.message);
-      console.log('axios response', err.response);
-      setIsError(true);
-      setErrorMessage('Failed to update recipe!');
+      navigation.navigate('Myrecipe');
+    } catch (error) {
+      console.log(error);
       Toast.show({
         type: 'error',
         position: 'top',
-        text1: 'Failed to update recipe!',
-        text2: {errorMessage},
+        text1: 'Failed to upload recipe!',
       });
     }
   };
@@ -135,7 +132,7 @@ function Updaterecipe({route}) {
             placeholder="Title"
             placeholderTextColor={'#C4C4C4'}
             value={recipe.name_food}
-            onChangeText={value => handleChange('name_food', value)}
+            onChangeText={text => handleChange('name_food', text)}
           />
         </View>
         <View
@@ -158,7 +155,7 @@ function Updaterecipe({route}) {
             placeholder="Description"
             placeholderTextColor={'#C4C4C4'}
             value={recipe.ingrediens}
-            onChangeText={value => handleChange('ingrediens', value)}
+            onChangeText={text => handleChange('ingrediens', text)}
           />
         </View>
 
@@ -207,10 +204,10 @@ function Updaterecipe({route}) {
               color: '#999',
               flex: 1,
             }}
-            placeholder="Video"
+            placeholder="Link Video YT"
             placeholderTextColor={'#C4C4C4'}
             value={recipe.video}
-            onChangeText={value => handleChange('video', value)}
+            onChangeText={text => handleChange('video', text)}
           />
         </View>
         <TouchableOpacity

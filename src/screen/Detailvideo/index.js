@@ -10,7 +10,6 @@ function DetailVideo({navigation}) {
           style={{width: 400, height: 400}}
           source={require('../../image/pizzamini.jpeg')}
         />
-
         <Text
           style={{
             position: 'absolute',

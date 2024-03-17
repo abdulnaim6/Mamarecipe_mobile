@@ -18,6 +18,7 @@ import Profile from '../screen/Profile';
 import Myrecipe from '../screen/Myrecipe';
 import Updaterecipe from '../screen/Updaterecipe';
 import Video from '../screen/Video';
+import Splash from '../screen/Splash';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -81,7 +82,7 @@ function HomeTabs() {
 function MainRoute() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Login"
           component={Login}
@@ -131,6 +132,11 @@ function MainRoute() {
         <Stack.Screen
           name="Video"
           component={Video}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

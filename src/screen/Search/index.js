@@ -54,6 +54,13 @@ function Chat({navigation}) {
           onChangeText={text => setSearchQuery(text)}
           onEndEditing={handleSearch}
         />
+        <FontAwesome
+          name="sort"
+          size={30}
+          color="#EEC302"
+          onPress={handleSort}
+          style={{marginRight: 10}}
+        />
       </View>
       <ScrollView vertical={true} style={{marginBottom: 100}}>
         {recipe?.rows?.map(recipeItem => (
