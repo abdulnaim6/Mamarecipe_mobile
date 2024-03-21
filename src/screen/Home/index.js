@@ -1,7 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   View,
   Text,
@@ -9,11 +6,13 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-import {SvgXml} from 'react-native-svg';
 import {useDispatch, useSelector} from 'react-redux';
 import {GetRecipe} from '../../config/redux/action/recipeAction';
+import {useNavigation} from '@react-navigation/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import {SvgXml} from 'react-native-svg';
 
 const Icon43 = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
 <rect width="64" height="64" rx="16" fill="#FDE901"/>
@@ -52,6 +51,7 @@ function HomeScreen({route}) {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [sort, setSort] = useState('ASC');
+  const navigation = useNavigation();
 
   const handleSearch = () => {
     dispatch(GetRecipe({sort, keyword: searchQuery}));
@@ -65,10 +65,6 @@ function HomeScreen({route}) {
     dispatch(GetRecipe({sort, keyword: searchQuery}));
   }, [dispatch, sort, searchQuery]);
 
-  const navigation = useNavigation();
-  // const handleImagePress = recipeId => {
-  //   navigation.navigate('Detailinggrediens', recipeId);
-  // };
   return (
     <View>
       <View
@@ -95,117 +91,131 @@ function HomeScreen({route}) {
           }}
           placeholder="Search Pasta, Bread, etc"
           placeholderTextColor={'#999'}
+          value={searchQuery}
+          onChangeText={text => setSearchQuery(text)}
+          onEndEditing={handleSearch}
+        />
+        <FontAwesome
+          name="sort"
+          size={30}
+          color="#EEC302"
+          onPress={handleSort}
+          style={{marginRight: 10}}
         />
       </View>
-
       <Text
         style={{color: '#3F3A3A', fontSize: 20, marginTop: 20, marginLeft: 20}}>
         New Recipes
       </Text>
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} scrollEventThrottle={400}>
         {recipe?.rows?.map(recipeItem => (
-          <View style={{flexDirection: 'row'}} key={recipeItem.recipe_id}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('Detailinggrediens', {
-                  recipeId: recipeItem.recipe_id,
-                })
-              }>
-              <View>
-                <Image
-                  source={{uri: recipeItem.picture}}
-                  style={{
-                    width: 130,
-                    height: 160,
-                    borderRadius: 15,
-                    marginLeft: 20,
-                    marginTop: 10,
-                  }}
-                />
-                <Text
-                  style={{
-                    position: 'absolute',
-                    top: 120,
-                    left: 30,
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}>
-                  {recipeItem.name_food}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Detailinggrediens', {
+                recipeId: recipeItem.recipe_id,
+              })
+            }
+            key={recipeItem.recipe_id}>
+            <View>
+              <Image
+                source={{uri: recipeItem.picture}}
+                style={{
+                  width: 130,
+                  height: 160,
+                  borderRadius: 15,
+                  marginLeft: 20,
+                  marginTop: 10,
+                }}
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  top: 120,
+                  left: 30,
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}>
+                {recipeItem.name_food}
+              </Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
-
       <Text
         style={{color: '#18172B', marginLeft: 20, marginTop: 20, fontSize: 20}}>
         Popular Recepies
       </Text>
-      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-        <SvgXml
-          xml={Icon43}
-          width={50}
-          height={50}
-          marginLeft={20}
-          marginTop={10}
-        />
-        <View style={{marginLeft: 30}}>
-          <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
-            Orange La Pasta
-          </Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <SvgXml xml={star} width={20} height={20} />
-            <Text style={{color: '#18172B'}}>
-              <Text style={{marginRight: 20}}>
-                4.6<Text style={{color: '#6E80B0'}}>Pasta</Text>
-              </Text>
+      <View style={{flexDirection: 'column'}}>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+          <SvgXml
+            xml={Icon43}
+            width={50}
+            height={50}
+            marginLeft={20}
+            marginTop={10}
+          />
+          <View style={{marginLeft: 30}}>
+            <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
+              Orange La Pasta
             </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgXml xml={star} width={20} height={20} />
+              <Text style={{color: '#18172B'}}>
+                <Text style={{marginRight: 20}}>
+                  4.6<Text style={{color: '#6E80B0'}}>Pasta</Text>
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-        <SvgXml
-          xml={Icon44}
-          width={50}
-          height={50}
-          marginLeft={20}
-          marginTop={10}
-        />
-        <View style={{marginLeft: 30}}>
-          <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
-            Spicy Ramenyu
-          </Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <SvgXml xml={star} width={20} height={20} />
-            <Text style={{color: '#18172B'}}>
-              <Text style={{marginRight: 20}}>
-                4.3
-                <Text style={{color: '#6E80B0', marginRight: 10}}>Korean</Text>
-              </Text>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+          <SvgXml
+            xml={Icon44}
+            width={50}
+            height={50}
+            marginLeft={20}
+            marginTop={10}
+          />
+          <View style={{marginLeft: 30}}>
+            <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
+              Spicy Ramenyu
             </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgXml xml={star} width={20} height={20} />
+              <Text style={{color: '#18172B'}}>
+                <Text style={{marginRight: 20}}>
+                  4.3
+                  <Text style={{color: '#6E80B0', marginRight: 10}}>
+                    Korean
+                  </Text>
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-        <SvgXml
-          xml={Icon45}
-          width={50}
-          height={50}
-          marginLeft={20}
-          marginTop={10}
-        />
-        <View style={{marginLeft: 30}}>
-          <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
-            Lobster Toast
-          </Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <SvgXml xml={star} width={20} height={20} />
-            <Text style={{color: '#18172B'}}>
-              <Text style={{marginRight: 20}}>
-                4.0<Text style={{color: '#6E80B0'}}>Seafood</Text>
-              </Text>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+          <SvgXml
+            xml={Icon45}
+            width={50}
+            height={50}
+            marginLeft={20}
+            marginTop={10}
+          />
+          <View style={{marginLeft: 30}}>
+            <Text style={{color: '#18172B', fontSize: 16, fontWeight: 500}}>
+              Lobster Toast
             </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgXml xml={star} width={20} height={20} />
+              <Text style={{color: '#18172B'}}>
+                <Text style={{marginRight: 20}}>
+                  4.0<Text style={{color: '#6E80B0'}}>Seafood</Text>
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
       </View>

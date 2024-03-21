@@ -34,6 +34,25 @@ export const GetRecipe =
     }
   };
 
+export const GetByRecipe =
+  ({page, limit}) =>
+  async dispatch => {
+    try {
+      dispatch({type: 'GET_RECIPEBY_REQUEST'});
+      const response = await api.get(`/paginate?page=${page}&limit=${limit}`);
+      const recipe = response.data;
+      console.log(recipe);
+      dispatch({type: 'GET_RECIPEBY_SUCCESS', payload: recipe});
+      return recipe;
+    } catch (error) {
+      dispatch({
+        type: 'GET_RECIPEBY_FAILURE',
+        payload: error.response.data.message,
+      });
+      throw error.response;
+    }
+  };
+
 export const GetRecipeByID =
   ({recipe_id}) =>
   async dispatch => {

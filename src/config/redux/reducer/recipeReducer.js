@@ -40,6 +40,23 @@ const recipeReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+    case 'GET_RECIPEBY_REQUEST':
+      return {
+        ...state,
+        loading: true,
+      };
+    case 'GET_RECIPEBY_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        recipe: action.payload.result.result.rows,
+      };
+    case 'GET_RECIPEBY_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case 'UPDATE_RECIPE_REQUEST':
       return {
         ...state,
